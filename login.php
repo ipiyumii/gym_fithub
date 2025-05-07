@@ -1,5 +1,8 @@
 
-<?php include("./includes/header.php"); ?>
+<?php 
+    include("./includes/header.php"); 
+    ?>
+    
 <body class="bg-gray-900 min-h-screen">
     <div class="flex justify-center items-center min-h-screen p-4">
         <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-8">

@@ -55,6 +55,8 @@ ini_set('display_errors', 1);
             </div>
             
             <!-- Registration Form -->
+
+            <!--piyumi-->
             <form id="registrationForm" action="register.php" method="POST" class="space-y-6">
                 <!-- Full Name -->
                 <div>
@@ -245,6 +247,7 @@ ini_set('display_errors', 1);
                 alert('Please enter a valid email address');
                 return;
             }
+            //piyumi
             this.submit(); 
         });
     </script>
