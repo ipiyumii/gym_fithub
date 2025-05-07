@@ -27,7 +27,8 @@
                 $userData = getUserData($email);
 
                 //set user session
-    
+                setSession('user_id', $userData['id']);
+                setSession('email', $userData['email']);
 
                 //redirect the user
                 header("Location: home.php"); 
