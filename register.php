@@ -1,6 +1,43 @@
 
 
-<?php include("./includes/header.php"); ?>
+<?php 
+    include("./includes/header.php"); 
+    include_once 'auth.php';
+    include_once 'validateInput.php';
+    include_once 'dbUtil.php';
+    include_once 'session.php';
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $fullName = htmlspecialchars($_POST['fullName']);
+        $email = htmlspecialchars($_POST['email']);
+        $password = htmlspecialchars($_POST['password']);
+        $confirmPassword = htmlspecialchars($_POST['confirmPassword']);
+        $phone = htmlspecialchars($_POST['phone']);
+
+        $ValidationErrors = validateRegistrationInput($fullName, $email, $password, $confirmPassword, $phone);
+
+        if(empty($ValidationErrors)) {
+            $hashedPassword = hashPassword($password);
+            $user = saveUserToDatabase($fullName, $hashedPassword, $email, $phone);
+
+            echo "<script>alert('Registration successful!');</script>";
+
+            if ($user) {
+                $userData = getUserData($email);
+
+                //set user session
+    
+
+                //redirect the user
+                header("Location: home.php"); 
+                exit; 
+            }     
+            
+        } else {
+            echo "<script>alert('Validation failed. Please check your input.');</script>";
+        }
+    }
+?>
 
 <body class="bg-gray-900 min-h-screen">
     <div class="flex justify-center items-center min-h-screen p-4">
