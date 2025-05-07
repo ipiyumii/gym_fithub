@@ -1,5 +1,32 @@
 
-<?php include("./includes/header.php"); ?>
+<?php
+//piyumi 
+    include("./includes/header.php"); 
+    include_once 'auth.php';
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $email = htmlspecialchars($_POST['email']);
+        $password = htmlspecialchars($_POST['password']);
+
+        if (empty($password)) {
+            $error = "Password is required.";
+        } else {
+            $user = getUserData($email);
+
+            if ($user && verifyPassword($password, $user['password'])) {
+                // set user session 
+                setSession('user_id', $user['id']);
+                setSession('user_email',  $user['email']);
+
+                header('Location: dashboard.php');
+                exit();
+            }  else {
+                    $error = "Invalid username or password.";
+                }
+        }
+    }
+?>
+
 <body class="bg-gray-900 min-h-screen">
     <div class="flex justify-center items-center min-h-screen p-4">
         <div class="bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-8">
@@ -147,7 +174,6 @@
             }
             
             // If all validations pass
-            alert('Login successful! Redirecting to dashboard...');
             window.location.href = 'home.php'; // Redirect to home.php
         });
     </script>
