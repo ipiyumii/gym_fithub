@@ -15,16 +15,21 @@
 }
    
 function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
-    $mysqli = dbConnection();
+    $conn = dbConnection();
+    if ($conn) {
+        echo "Connected successfully!";
+    } else {
+        echo "Connection failed!";
+    }
 
-     $fullName = mysqli_real_escape_string($mysqli, $fullName);
-     $password = mysqli_real_escape_string($mysqli, $hashedPassword);
-     $email = mysqli_real_escape_string($mysqli, $email);
-     $phone = mysqli_real_escape_string($mysqli, $phone);
+     $fullName = mysqli_real_escape_string($conn, $fullName);
+     $password = mysqli_real_escape_string($conn, $hashedPassword);
+     $email = mysqli_real_escape_string($conn, $email);
+     $phone = mysqli_real_escape_string($conn, $phone);
 
     
-         $insertQuery = "INSERT INTO users (fullname, password, email, phone) VALUES (?, ?, ?, ?)";
-         $stmt = $mysqli->prepare($insertQuery);
+         $insertQuery = "INSERT INTO users (full_name, password, email, phone) VALUES (?, ?, ?, ?)";
+         $stmt = $conn->prepare($insertQuery);
 
          if ($stmt) {
              $stmt->bind_param("ssss", $fullName, $hashedPassword, $email, $phone);
@@ -33,21 +38,21 @@ function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
              $userId = $stmt->insert_id;
 
              $stmt->close();
-             $mysqli->close();
+             $conn->close();
 
              return $userId;
          } else {
-             $mysqli->close();
-             return "Error in prepared statement: " . $mysqli->error;
+             $conn->close();
+             return "Error in prepared statement: " . $conn->error;
          }
 
 }
 
 function validateEmail($email) {
-    $mysqli = dbConnection();
+    $conn = dbConnection();
 
     $query = "SELECT * FROM users WHERE email = ?";
-    $stmt = $mysqli->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -59,10 +64,10 @@ function validateEmail($email) {
 
 
 function getUserData($email) {
-    $mysqli = dbConnection();
+    $conn = dbConnection();
 
     $query = "SELECT * FROM users WHERE email = ?";
-    $stmt = $mysqli->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
