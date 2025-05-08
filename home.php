@@ -1,5 +1,35 @@
 
-<?php include("./includes/header.php"); ?>
+<?php 
+    include("./includes/header.php"); 
+    include_once 'dbUtil.php';
+
+    session_start();
+
+    //check if user is logged in
+    if (!isset($_SESSION['email'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+    $email = $_SESSION['email'];
+    $user = getUserData($email);
+
+    if($user) {
+        $fullName = trim($user['fullname']); 
+        $nameParts = explode(" ", $fullName);
+
+        $firstName = $nameParts[0]; // First name
+
+        //extract initials
+        $firstInitial = isset($nameParts[0][0]) ? strtoupper($nameParts[0][0]) : '';
+        $secondInitial = isset($nameParts[1][0]) ? strtoupper($nameParts[1][0]) : '';
+        $initials = $firstInitial . $secondInitial;
+    } else {
+        echo "User not found.";
+        exit();
+    }
+
+?>
     <style>
         .bg-gym {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1600/900');
@@ -35,9 +65,9 @@
                         <div class="ml-3 relative">
                             <div class="flex items-center">
                                 <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-white">JD</span>
+                                    <span class="text-sm font-medium text-white"><?php echo $initials; ?></span>
                                 </div>
-                                <span class="ml-2 text-sm text-gray-300">John Doe</span>
+                                <span class="ml-2 text-sm text-gray-300"><?php echo htmlspecialchars($firstName); ?></span>
                             </div>
                         </div>
                     </div>
@@ -72,7 +102,8 @@
                 <!-- Welcome Banner -->
                 <div class="bg-gym text-white rounded-xl overflow-hidden shadow-lg">
                     <div class="p-8">
-                        <h2 class="text-3xl font-bold mb-2">Welcome back, John!</h2>
+                        <!-- <h2 class="text-3xl font-bold mb-2">Welcome back, John!</h2> -->
+                        <h2 class="text-3xl font-bold mb-2">Welcome back, <?php echo htmlspecialchars($firstName); ?>!</h2>
                         <p class="text-gray-300 mb-6">Track your fitness journey and manage your membership all in one place.</p>
                         <div class="flex space-x-4">
                             <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
