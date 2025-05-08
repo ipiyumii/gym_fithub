@@ -28,7 +28,7 @@ function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
      $phone = mysqli_real_escape_string($conn, $phone);
 
     
-         $insertQuery = "INSERT INTO users (full_name, password, email, phone) VALUES (?, ?, ?, ?)";
+         $insertQuery = "INSERT INTO members (fullname, password, email, phone) VALUES (?, ?, ?, ?)";
          $stmt = $conn->prepare($insertQuery);
 
          if ($stmt) {
@@ -51,7 +51,7 @@ function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
 function validateEmail($email) {
     $conn = dbConnection();
 
-    $query = "SELECT * FROM users WHERE email = ?";
+    $query = "SELECT * FROM members WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -66,7 +66,7 @@ function validateEmail($email) {
 function getUserData($email) {
     $conn = dbConnection();
 
-    $query = "SELECT * FROM users WHERE email = ?";
+    $query = "SELECT * FROM members WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
