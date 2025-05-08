@@ -1,8 +1,15 @@
 
 <?php
 //piyumi 
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
     include("./includes/header.php"); 
     include_once 'auth.php';
+    include_once 'validateInput.php';
+    include_once 'dbUtil.php';
+    include_once 'session.php';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = htmlspecialchars($_POST['email']);
@@ -13,16 +20,20 @@
         } else {
             $user = getUserData($email);
 
-            if ($user && verifyPassword($password, $user['password'])) {
-                // set user session 
+            if ($user === null) {
+                $error = "Invalid username or password.";
+            } elseif (!verifyPassword($password, $user['password'])) {
+                $error = "Invalid username or password.";
+            } else {
+                // Login success
                 setSession('user_id', $user['id']);
                 setSession('user_email',  $user['email']);
-
-                header('Location: dashboard.php');
+                
+                header('Location: home.php');
+                
                 exit();
-            }  else {
-                    $error = "Invalid username or password.";
-                }
+            }
+            
         }
     }
 ?>
@@ -37,7 +48,7 @@
             </div>
             
             <!-- Login Form -->
-            <form id="loginForm" action="#" method="POST" class="space-y-6">
+            <form id="loginForm" action="login.php" method="POST" class="space-y-6">
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
@@ -172,8 +183,7 @@
                 alert('Please enter a valid email address');
                 return;
             }
-            
-            // If all validations pass
-            window.location.href = 'home.php'; // Redirect to home.php
+           
+            this.submit();
         });
     </script>

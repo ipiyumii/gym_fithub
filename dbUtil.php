@@ -28,22 +28,25 @@ function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
      $phone = mysqli_real_escape_string($conn, $phone);
 
     
-         $insertQuery = "INSERT INTO users (full_name, password, email, phone) VALUES (?, ?, ?, ?)";
+         $insertQuery = "INSERT INTO members (fullname, password, email, phone) VALUES (?, ?, ?, ?)";
          $stmt = $conn->prepare($insertQuery);
 
          if ($stmt) {
              $stmt->bind_param("ssss", $fullName, $hashedPassword, $email, $phone);
-             $stmt->execute();
+             if ($stmt->execute()){
+                $userId = $stmt->insert_id;
 
-             $userId = $stmt->insert_id;
-
-             $stmt->close();
-             $conn->close();
-
-             return $userId;
+                $stmt->close();
+                $conn->close();
+                return $userId;
+             } else {
+                $stmt->close();
+                $conn->close();
+                return false;
+             }
          } else {
              $conn->close();
-             return "Error in prepared statement: " . $conn->error;
+             return false;
          }
 
 }
@@ -51,7 +54,7 @@ function saveUserToDatabase($fullName, $hashedPassword, $email ,$phone) {
 function validateEmail($email) {
     $conn = dbConnection();
 
-    $query = "SELECT * FROM users WHERE email = ?";
+    $query = "SELECT * FROM members WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -66,7 +69,7 @@ function validateEmail($email) {
 function getUserData($email) {
     $conn = dbConnection();
 
-    $query = "SELECT * FROM users WHERE email = ?";
+    $query = "SELECT * FROM members WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
