@@ -27,14 +27,14 @@ ini_set('display_errors', 1);
             if ($user) {
                 echo "<script>console.log('User ID: " . $user . "');</script>";
 
-                $userData = getUserData($email);
+                // $userData = getUserData($email);
 
-                //set user session
-                setSession('user_id', $userData['id']);
-                setSession('email', $userData['email']);
+                // //set user session
+                // setSession('user_id', $userData['id']);
+                // setSession('email', $userData['email']);
 
                 //redirect the user
-                header("Location: home.php"); 
+                header("Location: login.php"); 
                 exit; 
             }     
             
