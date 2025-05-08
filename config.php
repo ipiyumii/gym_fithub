@@ -2,8 +2,8 @@
 // Database Configuration
 define('DB_SERVER', 'localhost');  // Database server
 define('DB_USERNAME', 'root');     // Database username
-define('DB_PASSWORD', '');         // Database password
-define('DB_NAME', 'fithub_db');    // Database name
+define('DB_PASSWORD', 'root');         // Database password
+define('DB_NAME', 'gym');    // Database name
 
 // Attempt to connect to MySQL database
 $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);

@@ -1,5 +1,25 @@
 
-<?php include("./includes/header.php"); ?>
+<?php 
+    include("./includes/header.php"); 
+    // include_once 'session.php';
+    // include 'dbUtil.php'; 
+
+    // session_start();
+    // $email = getSession('email');
+
+    // $user = getUserData($email);
+
+    // if ($user) {
+    //     $fullName = trim($user['fullname']); 
+    //     $firstName = explode(" ", $fullName)[0];
+    //     echo $firstName; 
+    //     exit();
+    // } else {
+    //     echo "User not found.";
+    //     exit();
+    // }
+
+?>
     <style>
         .bg-gym {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1600/900');
@@ -72,7 +92,7 @@
                 <!-- Welcome Banner -->
                 <div class="bg-gym text-white rounded-xl overflow-hidden shadow-lg">
                     <div class="p-8">
-                        <h2 class="text-3xl font-bold mb-2">Welcome back, John!</h2>
+                        <h2 class="text-3xl font-bold mb-2">Welcome back, john</h2>
                         <p class="text-gray-300 mb-6">Track your fitness journey and manage your membership all in one place.</p>
                         <div class="flex space-x-4">
                             <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
