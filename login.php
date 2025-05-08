@@ -20,11 +20,9 @@ ini_set('display_errors', 1);
         } else {
             $user = getUserData($email);
 
-            if ($user === null) {
-                $error = "Invalid username or password.";
-            } elseif (!verifyPassword($password, $user['password'])) {
-                $error = "Invalid username or password.";
-            } else {
+            if ($user === null || !verifyPassword($password, $user['password'])) {
+                $invalidAlert = true;
+            }  else {
                 // Login success
                 setSession('user_id', $user['id']);
                 setSession('user_email',  $user['email']);
@@ -146,8 +144,21 @@ ini_set('display_errors', 1);
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
 
     <script>
+        <?php if($invalidAlert): ?>
+            window.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error', 
+                    text: 'Invalid email or password.', 
+                    showConfirmButton: false,
+                    allowOutsideClick: true, 
+                });
+            });
+        <?php endif; ?>
+
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
