@@ -2,9 +2,6 @@
 // Initialize the session
 session_start();
 
-
-
-// Include database connection
 require_once "config.php";
 
 // Process schedule operations

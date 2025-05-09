@@ -1,64 +1,68 @@
 <?php
-// Initialize the session
-session_start();
+//piyumi
+    require_once "dbUtil.php";
+
+    session_start();
+    $total_classes = getTotalClasses();
 
 
-// Include database connection
-require_once "config.php";
 
-// Get some stats for the dashboard
-$total_users = 0;
-$total_active_memberships = 0;
-$total_classes = 0;
-$total_bookings = 0;
 
-// Count total users
-$sql = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_users = $row['total'];
-}
+    
+    // require_once "config.php";
 
-// Count active memberships
-$sql = "SELECT COUNT(*) as total FROM user_memberships WHERE end_date >= CURDATE()";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_active_memberships = $row['total'];
-}
+    // $total_users = 0;
+    // $total_active_memberships = 0;
+    // $total_classes = 0;
+    // $total_bookings = 0;
 
-// Count total classes
-$sql = "SELECT COUNT(*) as total FROM gym_classes";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_classes = $row['total'];
-}
+    // Count total users
+    // $sql = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
+    // $result = mysqli_query($conn, $sql);
+    // if($result) {
+    //     $row = mysqli_fetch_assoc($result);
+    //     $total_users = $row['total'];
+    // }
 
-// Count total bookings
-$sql = "SELECT COUNT(*) as total FROM user_class_bookings WHERE booking_date >= CURDATE()";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_bookings = $row['total'];
-}
+    // // Count active memberships
+    // $sql = "SELECT COUNT(*) as total FROM user_memberships WHERE end_date >= CURDATE()";
+    // $result = mysqli_query($conn, $sql);
+    // if($result) {
+    //     $row = mysqli_fetch_assoc($result);
+    //     $total_active_memberships = $row['total'];
+    // }
 
-// Get recent bookings
-$recent_bookings = [];
-$sql = "SELECT ucb.id, u.full_name, gc.name as class_name, cs.day_of_week, cs.start_time, ucb.booking_date, ucb.status
-        FROM user_class_bookings ucb
-        JOIN users u ON ucb.user_id = u.id
-        JOIN class_schedules cs ON ucb.schedule_id = cs.id
-        JOIN gym_classes gc ON cs.class_id = gc.id
-        ORDER BY ucb.created_at DESC
-        LIMIT 5";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $recent_bookings[] = $row;
-    }
-}
+    // Count total classes
+    // $sql = "SELECT COUNT(*) as total FROM gym_classes";
+    // $result = mysqli_query($conn, $sql);
+    // if($result) {
+    //     $row = mysqli_fetch_assoc($result);
+    //     $total_classes = $row['total'];
+    // }
+
+    // Count total bookings
+    // $sql = "SELECT COUNT(*) as total FROM user_class_bookings WHERE booking_date >= CURDATE()";
+    // $result = mysqli_query($conn, $sql);
+    // if($result) {
+    //     $row = mysqli_fetch_assoc($result);
+    //     $total_bookings = $row['total'];
+    // }
+
+    // Get recent bookings
+    // $recent_bookings = [];
+    // $sql = "SELECT ucb.id, u.full_name, gc.name as class_name, cs.day_of_week, cs.start_time, ucb.booking_date, ucb.status
+    //         FROM user_class_bookings ucb
+    //         JOIN users u ON ucb.user_id = u.id
+    //         JOIN class_schedules cs ON ucb.schedule_id = cs.id
+    //         JOIN gym_classes gc ON cs.class_id = gc.id
+    //         ORDER BY ucb.created_at DESC
+    //         LIMIT 5";
+    // $result = mysqli_query($conn, $sql);
+    // if($result) {
+    //     while($row = mysqli_fetch_assoc($result)) {
+    //         $recent_bookings[] = $row;
+    //     }
+    // }
 ?>
 
 <!DOCTYPE html>

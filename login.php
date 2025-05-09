@@ -148,8 +148,8 @@ ini_set('display_errors', 1);
 </body>
 
     <script>
-        <?php if($invalidAlert): ?>
-            window.addEventListener('DOMContentLoaded', function() {
+    <?php if(isset($invalidAlert) && $invalidAlert): ?>
+        window.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'error', 
                     text: 'Invalid email or password.', 
