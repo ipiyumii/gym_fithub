@@ -1,4 +1,9 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Initialize the session
 session_start();
 
@@ -13,20 +18,20 @@ $total_classes = 0;
 $total_bookings = 0;
 
 // Count total users
-$sql = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_users = $row['total'];
-}
+// $sql = "SELECT COUNT(*) as total FROM members WHERE role = 'user'";
+// $result = mysqli_query($conn, $sql);
+// if($result) {
+//     $row = mysqli_fetch_assoc($result);
+//     $total_users = $row['total'];
+// }
 
 // Count active memberships
-$sql = "SELECT COUNT(*) as total FROM user_memberships WHERE end_date >= CURDATE()";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_active_memberships = $row['total'];
-}
+// $sql = "SELECT COUNT(*) as total FROM user_memberships WHERE end_date >= CURDATE()";
+// $result = mysqli_query($conn, $sql);
+// if($result) {
+//     $row = mysqli_fetch_assoc($result);
+//     $total_active_memberships = $row['total'];
+// }
 
 // Count total classes
 $sql = "SELECT COUNT(*) as total FROM gym_classes";
@@ -37,28 +42,28 @@ if($result) {
 }
 
 // Count total bookings
-$sql = "SELECT COUNT(*) as total FROM user_class_bookings WHERE booking_date >= CURDATE()";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    $row = mysqli_fetch_assoc($result);
-    $total_bookings = $row['total'];
-}
+// $sql = "SELECT COUNT(*) as total FROM user_class_bookings WHERE booking_date >= CURDATE()";
+// $result = mysqli_query($conn, $sql);
+// if($result) {
+//     $row = mysqli_fetch_assoc($result);
+//     $total_bookings = $row['total'];
+// }
 
 // Get recent bookings
-$recent_bookings = [];
-$sql = "SELECT ucb.id, u.full_name, gc.name as class_name, cs.day_of_week, cs.start_time, ucb.booking_date, ucb.status
-        FROM user_class_bookings ucb
-        JOIN users u ON ucb.user_id = u.id
-        JOIN class_schedules cs ON ucb.schedule_id = cs.id
-        JOIN gym_classes gc ON cs.class_id = gc.id
-        ORDER BY ucb.created_at DESC
-        LIMIT 5";
-$result = mysqli_query($conn, $sql);
-if($result) {
-    while($row = mysqli_fetch_assoc($result)) {
-        $recent_bookings[] = $row;
-    }
-}
+// $recent_bookings = [];
+// $sql = "SELECT ucb.id, u.full_name, gc.name as class_name, cs.day_of_week, cs.start_time, ucb.booking_date, ucb.status
+//         FROM user_class_bookings ucb
+//         JOIN users u ON ucb.user_id = u.id
+//         JOIN class_schedules cs ON ucb.schedule_id = cs.id
+//         JOIN gym_classes gc ON cs.class_id = gc.id
+//         ORDER BY ucb.created_at DESC
+//         LIMIT 5";
+// $result = mysqli_query($conn, $sql);
+// if($result) {
+//     while($row = mysqli_fetch_assoc($result)) {
+//         $recent_bookings[] = $row;
+//     }
+// }
 ?>
 
 <!DOCTYPE html>
