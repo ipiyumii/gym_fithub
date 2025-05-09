@@ -5,15 +5,11 @@
     session_start();
     $total_classes = getTotalClasses();
 
-
-
-
-    
-    // require_once "config.php";
+    require_once "config.php";
 
     // $total_users = 0;
     // $total_active_memberships = 0;
-    // $total_classes = 0;
+    $total_classes = 0;
     // $total_bookings = 0;
 
     // Count total users
@@ -33,12 +29,12 @@
     // }
 
     // Count total classes
-    // $sql = "SELECT COUNT(*) as total FROM gym_classes";
-    // $result = mysqli_query($conn, $sql);
-    // if($result) {
-    //     $row = mysqli_fetch_assoc($result);
-    //     $total_classes = $row['total'];
-    // }
+    $sql = "SELECT COUNT(*) as total FROM gym_classes";
+    $result = mysqli_query($conn, $sql);
+    if($result) {
+        $row = mysqli_fetch_assoc($result);
+        $total_classes = $row['total'];
+    }
 
     // Count total bookings
     // $sql = "SELECT COUNT(*) as total FROM user_class_bookings WHERE booking_date >= CURDATE()";
