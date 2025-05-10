@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Initialize the session
 session_start();
 
@@ -21,7 +25,7 @@ if(!isset($_GET["id"]) || empty(trim($_GET["id"]))) {
 
 $id = trim($_GET["id"]);
 
-// Processing form data when form is submitted
+// update trainner
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validate full name
@@ -112,7 +116,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssdssi", $param_name, $param_specialty, $param_price, $param_image, $param_status, $param_id);
+            mysqli_stmt_bind_param($stmt, "sssdssi", $param_name, $param_specialty, $param_bio, $param_price, $param_image, $param_status, $param_id);
             
             // Set parameters
             $param_name = $full_name;
