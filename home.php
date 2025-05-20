@@ -1,17 +1,20 @@
 
 <?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
     include("./includes/header.php"); 
     include_once 'dbUtil.php';
 
     session_start();
 
     //check if user is logged in
-    if (!isset($_SESSION['email'])) {
+    if (!isset($_SESSION['user_email'])) {
         header("Location: login.php");
         exit();
     }
 
-    $email = $_SESSION['email'];
+    $email = $_SESSION['user_email'];
     $user = getUserData($email);
 
     if($user) {
@@ -56,30 +59,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex items-center">
-                    <button type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
-                        <i class="fas fa-bell"></i>
-                        <span class="absolute top-3 right-14 md:right-28 inline-flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-xs font-bold text-white">3</span>
-                    </button>
-                    <div class="ml-4 flex items-center md:ml-6">
-                        <div class="ml-3 relative">
-                            <div class="flex items-center">
-                                <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-white"><?php echo $initials; ?></span>
-                                </div>
-                                <span class="ml-2 text-sm text-gray-300"><?php echo htmlspecialchars($firstName); ?></span>
-                            </div>
-                        </div>
+
+                <div class="absolute top-4 right-4 flex items-center space-x-4">
+                    <!-- Bell icon with badge -->
+                    <div class="relative">
+                        <button type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <span class="absolute -top-1 -right-1 inline-flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-xs font-bold text-white">
+                            3
+                        </span>
                     </div>
-                    <div class="ml-4 md:hidden">
+
+                    <!-- User profile -->
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
+                            <span class="text-sm font-medium text-white"><?php echo $initials; ?></span>
+                        </div>
+                        <span class="ml-2 text-sm text-gray-300"><?php echo htmlspecialchars($firstName); ?></span>
+                    </div>
+
+                    <!-- Hamburger menu (mobile) -->
+                    <div class="md:hidden">
                         <button type="button" class="text-gray-400 hover:text-white focus:outline-none">
                             <i class="fas fa-bars"></i>
                         </button>
                     </div>
                 </div>
-            </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Membership Status Banner -->
     <div class="bg-indigo-600 text-white p-4">

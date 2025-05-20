@@ -150,4 +150,44 @@
     //     return $bookings;
     // }
 
+
+
+    //bookings
+
+    //insert class booking
+    function insertClassBooking($userId, $scheduleId, $classDate) {
+        $conn = dbConnection();
+
+        $query = "INSERT INTO class_bookings (member_id, schedule_id, class_date, status)  VALUES (?, ?, ?, 'booked')";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iis", $userId, $scheduleId, $classDate);
+
+        $result = $stmt->execute();
+        $stmt->close();
+        return $result;
+    }
+
+
+    //retrieve upcomming classes of a user
+    function getUpcomingClasses($userId) {
+        $conn = dbConnection();
+
+        $query = "SELECT cb.id, gc.name as class_name, cs.start_time, cs.end_time, cb.class_date
+                  FROM class_bookings cb
+                  JOIN class_schedules cs ON cb.schedule_id = cs.id
+                  JOIN gym_classes gc ON cs.class_id = gc.id
+                  WHERE cb.member_id = ? AND cb.status = 'booked' AND cb.class_date >= CURDATE()
+                  ORDER BY cb.class_date ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $bookings = [];
+        while ($row = $result->fetch_assoc()) {
+            $bookings[] = $row;
+        }
+        return $bookings;
+    }
+
 ?>

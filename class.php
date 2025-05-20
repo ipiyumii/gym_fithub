@@ -1,4 +1,28 @@
-<?php include("./includes/header.php"); ?>
+<?php 
+    include("./includes/header.php"); 
+    include_once "dbUtil.php";
+
+    $conn = dbConnection();
+    if (!$conn) {
+        //echo "Connected successfully!";
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+    session_start();
+
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
+
+    $upcomingClasses = getUpcomingClasses($_SESSION['user_id']);
+    if(!$upcomingClasses) {
+        echo "Error fetching bookings.";
+    } else {
+
+    }
+
+?>
     <style>
         .bg-gym {
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1600/900');
@@ -108,6 +132,14 @@
                         <input type="text" id="class-search" class="pl-10 w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border" placeholder="Search classes...">
                     </div>
                 </div>
+
+                <!-- <div class="flex space-x-4 justify-end">
+                    <a href="book_class.php" 
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition duration-300 flex items-center justify-center h-8 px-4 text-sm leading-none">
+                        Book a Class
+                    </a>
+                </div> -->
+
             </div>
         </div>
         <?php include("./new.php"); ?>
@@ -123,7 +155,7 @@
                         <h2 class="text-xl font-bold text-gray-900">Your Upcoming Classes</h2>
                     </div>
                     <div class="p-6">
-                        <div class="space-y-4">
+                        <!-- <div class="space-y-4">
                             <div class="border border-gray-200 rounded-lg p-4 flex justify-between items-center">
                                 <div class="flex items-center">
                                     <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
@@ -165,7 +197,41 @@
                                 <button class="text-red-600 hover:text-red-800 text-sm font-medium focus:outline-none">
                                     <i class="fas fa-times mr-1"></i> Cancel
                                 </button>
-                            </div>
+                            </div> 
+                        </div> -->
+
+                        <div class="space-y-4">
+                            <?php if (!empty($upcomingClasses)): ?>
+                            <?php foreach ($upcomingClasses as $class): ?>
+                                <?php
+                                // Optional: Format date
+                                $date = date("l, F j", strtotime($class['class_date']));
+                                $time = date("g:i A", strtotime($class['start_time']));
+                                // Optional defaults
+                                $color = $class['color'] ?? 'gray';
+                                $icon = $class['icon'] ?? 'calendar-alt';
+                                ?>
+                                <div class="border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <div class="h-12 w-12 rounded-full bg-<?= $color ?>-100 flex items-center justify-center mr-4">
+                                    <i class="fas fa-<?= $icon ?> text-<?= $color ?>-600"></i>
+                                    </div>
+                                    <div>
+                                    <h3 class="font-semibold text-gray-900"><?= htmlspecialchars($class['class_name']) ?></h3>
+                                    <p class="text-sm text-gray-500"><?= $date ?> • <?= $time ?> • <?= htmlspecialchars($class['instructor']) ?></p>
+                                    </div>
+                                </div>
+                                <form method="POST" action="cancel_booking.php">
+                                    <input type="hidden" name="booking_id" value="<?= $class['booking_id'] ?>">
+                                    <button class="text-red-600 hover:text-red-800 text-sm font-medium focus:outline-none">
+                                    <i class="fas fa-times mr-1"></i> Cancel
+                                    </button>
+                                </form>
+                                </div>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                            <p class="text-gray-500">You have no upcoming classes.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -264,7 +330,7 @@
                         <li>Comfortable workout clothes</li>
                     </ul>
                 </div>
-                <button id="book-class-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
+                <button href="book_class.php" id="book-class-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
                     Book This Class
                 </button>
             </div>
